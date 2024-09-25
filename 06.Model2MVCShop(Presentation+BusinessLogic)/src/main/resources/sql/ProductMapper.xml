@@ -51,7 +51,7 @@
 	<select  id="getProductList"  parameterType="search"	resultMap="productSelectMap">
 	  	SELECT *
 	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
-	  					FROM		(	SELECT prod_no , prod_name , price , manufacture_day
+	  					FROM		(	SELECT prod_no , prod_name , price , reg_date
 											FROM product
 											<if test="searchCondition != null">
 												<where>
@@ -75,18 +75,18 @@
 	
 	 <select  id="getTotalCount"  parameterType="search"	 resultType="int">
 	  	SELECT COUNT(*)
-	  	FROM(	SELECT prod_name , price , manufacture_day
+	  	FROM(	SELECT prod_name , price , prod_no
 						FROM product
 						<if test="searchCondition != null">
 							<where>
 								<if test="searchCondition == 0 and searchKeyword !='' ">
-									prod_no = #{searchKeyword}
+									prod_no LIKE CONCAT(#{searchKeyword}, '%')
 								</if>
 								<if test="searchCondition == 1 and searchKeyword !='' ">
-									prod_name = #{searchKeyword}
+									prod_name LIKE CONCAT(#{searchKeyword}, '%')
 								</if>
 								<if test="searchCondition == 2 and searchKeyword !='' ">
-									price = #{searchKeyword}
+									price LIKE CONCAT(#{searchKeyword}, '%')
 								</if>
 							</where>
 						</if> ) countTable						
